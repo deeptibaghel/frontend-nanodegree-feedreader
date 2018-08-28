@@ -69,14 +69,24 @@ $(function() {
     */
 
     describe('New Feed Selection', function() {
-       var prevUrl, newUrl;
+       let prevUrl, newUrl;
        beforeEach(function(done) {
          loadFeed(0, function() {
            // feed 0 done loading
-           prevUrl = allFeeds[0].url;
+           $('a.entry-link').each(function(index, val) {
+             if (index > 0) {
+               return false;
+             }
+             prevUrl = $(this).attr('href');
+           })
            loadFeed(1, function() {
-               newUrl = allFeeds[1].url;
-               done();
+             $('a.entry-link').each(function(index, val) {
+               if (index > 0) {
+                 return false;
+               }
+               newUrl = $(this).attr('href');
+             })
+              done();
            });
          });
        });
