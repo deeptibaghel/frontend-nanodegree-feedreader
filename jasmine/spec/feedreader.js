@@ -66,21 +66,23 @@ $(function() {
     });
 
     /* Test suite to ensure that the content changes afer the loadFeed function runs
-      The test checks the href property of links , if it doesn't match the initial
-      template value the test is successful.
     */
 
     describe('New Feed Selection', function() {
+       var prevUrl, newUrl;
        beforeEach(function(done) {
          loadFeed(0, function() {
-           done();
+           // feed 0 done loading
+           prevUrl = allFeeds[0].url;
+           loadFeed(1, function() {
+               newUrl = allFeeds[1].url;
+               done();
+           });
          });
        });
 
        it('ensures the content changes when a new feed is loaded', function(done) {
-           $('a.entry-link').each(function() {
-            expect($(this).attr('href') === "{{link}}").toBeFalsy();
-           })
+           expect(prevUrl === newUrl).toBeFalsy();
            done();
        })
 
