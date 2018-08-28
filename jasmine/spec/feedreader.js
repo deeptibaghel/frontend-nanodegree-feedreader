@@ -18,6 +18,7 @@ $(function() {
             allFeeds.forEach(function(feed) {
                 expect(feed.url).toBeDefined();
                 expect(feed.url).not.toBeNull();
+                expect(feed.url.length).not.toBe(0);
             });
         });
 
@@ -25,8 +26,10 @@ $(function() {
             allFeeds.forEach(function(feed) {
                 expect(feed.name).toBeDefined();
                 expect(feed.name).not.toBeNull();
+                expect(feed.name.length).not.toBe(0);
             });
         });
+
     });
 
     /*Test suite that ensures the menu changes visibility when the menu icon is clicked.
@@ -36,15 +39,16 @@ $(function() {
     describe('The menu', function() {
 
         it('ensures menu element is hidden by default', function () {
-            expect($('body').hasClass('menu-hidden')).toBeTruthy();
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
 
         it('changes visibility on click', function() {
             $('.menu-icon-link').click();
-            expect($('body').hasClass('menu-hidden')).toBeFalsy();
+            expect($('body').hasClass('menu-hidden')).toBe(false);
             $('.menu-icon-link').click();
-            expect($('body').hasClass('menu-hidden')).toBeTruthy();
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
+
     });
 
     /*Test suite that ensures when the loadFeed function is called and completes its work,
@@ -59,10 +63,10 @@ $(function() {
            });
         });
 
-        it('ensures .entry element exists on completion of loadFeed', function(done) {
+        it('ensures .entry element exists on completion of loadFeed', function() {
             expect($('.feed').has('.entry').length).toBeGreaterThan(0);
-            done();
         })
+
     });
 
     /* Test suite to ensure that the content changes afer the loadFeed function runs
@@ -72,28 +76,18 @@ $(function() {
        let prevUrl, newUrl;
        beforeEach(function(done) {
          loadFeed(0, function() {
-           // feed 0 done loading
-           $('a.entry-link').each(function(index, val) {
-             if (index > 0) {
-               return false;
-             }
-             prevUrl = $(this).attr('href');
-           })
-           loadFeed(1, function() {
-             $('a.entry-link').each(function(index, val) {
-               if (index > 0) {
-                 return false;
-               }
-               newUrl = $(this).attr('href');
-             })
-              done();
-           });
+            //feed 0 done loading
+            prevUrl = $('.feed').html();
+
+            loadFeed(1, function() {
+               newUrl = $('.feed').html();
+               done();
+            });
          });
        });
 
-       it('ensures the content changes when a new feed is loaded', function(done) {
-           expect(prevUrl === newUrl).toBeFalsy();
-           done();
+       it('ensures the content changes when a new feed is loaded', function() {
+           expect(prevUrl === newUrl).toBe(false);
        })
 
     });
